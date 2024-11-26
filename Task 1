@@ -1,0 +1,55 @@
+/* EDA analysis of WEATHER FORECAST Dataset using PYTHON in VISUAL STUDIO CODE */
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#Load the data set
+file_path=r"C:\Users\visma\Downloads\weather_data\weather_forecast_data.csv"
+weather_df = pd.read_csv(file_path)
+
+#Display the first few rows and data set info
+
+print(weather_df.head())
+print(weather_df.info())
+
+#checking null values
+print(weather_df.isnull().sum())
+
+#checking for duplicates
+print("Duplicates:", weather_df.duplicated().sum())
+
+# Fill missing values (example: fill with the column mean)
+weather_df['Temperature'] = weather_df['Temperature'].fillna(weather_df['Temperature'].mean())
+
+#perform EDA  analysis
+#Plot histograms and box plots to understand data distributions:
+
+# Plot histograms
+weather_df.hist(figsize=(10, 8))
+plt.show()
+
+# Box plot for Temperature
+sns.boxplot(data=weather_df, x='Temperature')
+plt.show()
+
+#Use scatterplots and correlation heatmaps to explore relationships between variables:
+
+# Scatterplot
+sns.scatterplot(data=weather_df, x='Temperature', y='Humidity')
+plt.show()
+
+# Correlation heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(weather_df.corr(), annot=True, cmap='coolwarm')
+plt.show()
+
+#Use line plots for time series data
+# Example: Plot temperature over time
+weather_df['Date'] = pd.to_datetime(weather_df['Date'])  # Ensure Date column is in datetime format
+weather_df.set_index('Date', inplace=True)
+
+weather_df['Temperature'].plot(figsize=(12, 6), title='Temperature Over Time')
+plt.xlabel('Date')
+plt.ylabel('Temperature')
+plt.show()
